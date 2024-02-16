@@ -1,10 +1,31 @@
 // Defining text characters for the empty and full hearts for you to use later.
 const EMPTY_HEART = '♡'
 const FULL_HEART = '♥'
-
 // Your JavaScript code goes here!
+function handleHeartClick(e) {
+  const clickedHeart = e.target;
+  mimicServerCall()
+    .then(() => {
+      if (clickedHeart.innerText === EMPTY_HEART) {
+        clickedHeart.innerText = FULL_HEART;
+        clickedHeart.className = 'activated-heart';
+      } else {
+        clickedHeart.innerText = EMPTY_HEART;
+        clickedHeart.className = '';
+      }
+    })
+    .catch(error => {
+      const modal = document.getElementById('modal');
+      modal.innerText = error;
+      modal.className = '';
+        setTimeout(() => modal.className = 'hidden', 3000);
+    });
+}
 
-
+const likeButtons = document.querySelectorAll('.like-glyph');
+likeButtons.forEach(button => {
+  button.addEventListener('click', handleHeartClick);
+});
 
 
 //------------------------------------------------------------------------------
@@ -23,3 +44,4 @@ function mimicServerCall(url="http://mimicServer.example.com", config={}) {
     }, 300);
   });
 }
+
